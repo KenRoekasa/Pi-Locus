@@ -10,8 +10,12 @@ def on_new_client(clientsocket,addr):
   while True:
     data = clientsocket.recv(1024)
     if not data: break
-    from_client = data.decode()
-    datastore = json.loads(from_client)
+        from_client = data.decode()
+        received_data = from_client.split("-|-")
+        beacon_id = received_data[0]
+        time = received_data[1]
+        datastore = json.loads(received_data[2])
+   
 
     for addr in datastore:
         x1 = 0
@@ -56,10 +60,10 @@ sock.bind((host, port))
 sock.listen(5)
 print('Started Server')
 
-
 while True:
     conn, addr = sock.accept()
     x= threading.Thread(target=on_new_client,args=(conn,addr))
     x.start()
 sock.close()
 print ('server disconnected')
+
