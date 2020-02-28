@@ -27,11 +27,13 @@ while True:
     from_client = ''
     while True:
         data = conn.recv(4096)
+
         if not data: break
         from_client = data.decode()
-
-
-        datastore = json.loads(from_client)
+        received_data = from_client.split("-|-")
+        beacon_id = received_data[0]
+        time = received_data[1]
+        datastore = json.loads(received_data[2])
 
         for addr in datastore:
             x1 = 0

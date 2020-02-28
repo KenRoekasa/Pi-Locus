@@ -4,6 +4,7 @@ import sys
 
 import bluetooth
 import bluetooth._bluetooth as bluez  # low level bluetooth wrappers
+import datetime
 
 import json
 
@@ -172,11 +173,14 @@ WIFI_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 connect(WIFI_sock)
 
-
+BEACON_ID = "1"
 for i in range(0,50):
     rssiResults = device_inquiry_with_with_rssi(sock)
+    data = BEACON_ID + "-|-"
+    data += str(datetime.datetime.now().time()) + "-|-"
+    data += convert_to_JSON(rssiResults)
     if rssiResults != {}:
-        WIFI_sock.send(convert_to_JSON(rssiResults).encode())
+        WIFI_sock.send(data.encode())
 WIFI_sock.close()
 
 
