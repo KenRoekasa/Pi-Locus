@@ -94,5 +94,7 @@ while True:
     x.start()
     y = threading.Thread(target=console_input)
     y.start()
+    z = threading.Thread(target=triangulate)
+    z.start()
 sock.close()
 print('server disconnected')
