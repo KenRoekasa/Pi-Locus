@@ -75,5 +75,7 @@ while True:
     conn, addr = sock.accept()
     x = threading.Thread(target=on_new_client, args=(conn, addr))
     x.start()
+    y = threading.Thread(target=console_input)
+    y.start()
 sock.close()
 print('server disconnected')
