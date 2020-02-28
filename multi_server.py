@@ -61,7 +61,7 @@ def triangulate():
             r2 = pos_dict[addr][1]
             x3 = 0
             y3 = 20
-            r3 = pos_dict[addr][2]
+            r3 = pos_dict[addr][1] #TODO: CHANGE ME
 
             x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
             if addr == "C4:86:E9:19:F7:51" or addr == "F8:AD:CB:0F:D8:E6":
@@ -90,14 +90,16 @@ host = 'localhost'
 sock.bind((host, port))
 sock.listen(5)
 print('Started Server')
+y = threading.Thread(target=console_input)
+y.start()
+z = threading.Thread(target=triangulate)
+z.start()
+
 
 while True:
     conn, addr = sock.accept()
     x = threading.Thread(target=on_new_client, args=(conn, addr))
     x.start()
-    y = threading.Thread(target=console_input)
-    y.start()
-    z = threading.Thread(target=triangulate)
-    z.start()
+   
 sock.close()
 print('server disconnected')
