@@ -43,9 +43,8 @@ def on_new_client(clientsocket, addr):
 
 
         if stop_server:
-            break
-    clientsocket.close()
-    sys.exit(0)
+            clientsocket.close()
+            sys.exit(0)
 
 
 def triangulate():
