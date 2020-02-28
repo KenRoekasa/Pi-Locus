@@ -52,6 +52,7 @@ def on_new_client(clientsocket, addr):
 
 def triangulate():
     while True:
+        for addr in pos_dict:
             x1 = 0
             y1 = 0
             r1 = pos_dict[addr][0]
