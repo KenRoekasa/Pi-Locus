@@ -5,18 +5,20 @@ import draw
 import json
 import threading
 
+import time as t
+
 def on_new_client(clientsocket,addr):
   print('Connected to a client')
   while True:
     data = clientsocket.recv(1024)
-    if not data: break
-        from_client = data.decode()
-        received_data = from_client.split("-|-")
-        beacon_id = received_data[0]
-        time = received_data[1]
-        datastore = json.loads(received_data[2])
+    if not data:
+      break
+    from_client = data.decode()
+    received_data = from_client.split("-|-")
+    beacon_id = received_data[0]
+    time = received_data[1]
+    datastore = json.loads(received_data[2])
    
-
     for addr in datastore:
         x1 = 0
         y1 = 0
@@ -33,9 +35,9 @@ def on_new_client(clientsocket,addr):
           print("Device Location of {}:".format(addr))
           print(x,y)
           draw.drawCellTowers(x1,y1,x2,y2,x3,y3,x,y)
-
+    t.sleep(4)
           
-    clientsocket.close()
+  clientsocket.close()
 
 
 
