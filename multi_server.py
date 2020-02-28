@@ -1,4 +1,5 @@
 import socket
+import sys
 
 import draw
 
@@ -47,6 +48,7 @@ def on_new_client(clientsocket, addr):
         if stop_server:
             break
     clientsocket.close()
+    sys.exit(0)
 
 
 
