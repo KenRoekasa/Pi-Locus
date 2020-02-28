@@ -13,7 +13,7 @@ import socket
 
 
 def connect(sock):
-    ip = 'localhost'
+    ip = '192.168.43.48'
     port = 8080
     sock.connect((ip, port))
 
