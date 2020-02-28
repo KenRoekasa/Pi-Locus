@@ -6,16 +6,19 @@ import draw
 import json
 import threading
 
+import time as sleep
+
 
 stop_server = False
 
+pos_dict = {}
 
 def console_input():
     global stop_server
     while True:
         text_input = input("Type stop to exit!\n")
         if text_input == "stop" or text_input == "Stop":
-            stop_server = True;
+            stop_server = True
 
 
 def on_new_client(clientsocket, addr):
@@ -29,22 +32,15 @@ def on_new_client(clientsocket, addr):
         time = received_data[1]
         datastore = json.loads(received_data[2])
 
-        for addr in datastore:
-            x1 = 0
-            y1 = 0
-            r1 = (((-datastore[addr]) + 27) / -24.5) * 20
-            x2 = 200
-            y2 = 0
-            r2 = 65
-            x3 = 0
-            y3 = 20
-            r3 = 120
 
-            x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
-            if addr == "C4:86:E9:19:F7:51":
-                print("Device Location of {}:".format(addr))
-                print(x, y)
-                draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y)
+
+
+        for addr in pos_dict:
+            pos_dict[addr][int(beacon_id)-1] = (((-datastore[addr]) + 27) / -24.5) * 20
+
+
+
+
 
         if stop_server:
             break
@@ -52,6 +48,24 @@ def on_new_client(clientsocket, addr):
     sys.exit(0)
 
 
+def triangulate():
+    while True:
+            x1 = 0
+            y1 = 0
+            r1 = pos_dict[addr][0]
+            x2 = 200
+            y2 = 0
+            r2 = pos_dict[addr][1]
+            x3 = 0
+            y3 = 20
+            r3 = pos_dict[addr][2]
+
+            x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
+            if addr == "C4:86:E9:19:F7:51" or addr == "F8:AD:CB:0F:D8:E6":
+                print("Device Location of {}:".format(addr))
+                print(x, y)
+                draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y)
+            sleep.sleep(2)
 
 
 # A function to apply trilateration formulas to return the (x,y) intersection point of three circles
