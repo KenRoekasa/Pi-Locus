@@ -1,4 +1,4 @@
-import socket
+mport socket
 
 import draw
 
@@ -47,7 +47,7 @@ while True:
 
             
             x,y = trackDevice(x1,y1,r1,x2,y2,r2,x3,y3,r3) # change when three devices are connected
-            if(addr == "C4:86:E9:19:F7:51" or addr == "F8:AD:CB:0F:D8:E6"):
+            if(addr == "C4:86:E9:19:F7:51"):
                 print("Device Location of {}:".format(addr))
                 print(x,y)
                 draw.drawCellTowers(x1,y1,x2,y2,x3,y3,x,y)
