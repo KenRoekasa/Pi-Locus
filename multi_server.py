@@ -36,6 +36,9 @@ def on_new_client(clientsocket, addr):
 
 
         for addr in pos_dict:
+            print(addr)
+            print(beacon_id)
+            print(str((((-datastore[addr]) + 27) / -24.5) * 20))
             pos_dict[addr][int(beacon_id)-1] = (((-datastore[addr]) + 27) / -24.5) * 20
 
 
