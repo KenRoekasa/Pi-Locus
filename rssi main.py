@@ -14,7 +14,7 @@ import socket
 
 def connect(sock):
     ip = '192.168.43.48'
-    port = 8080
+    port = 5000
     sock.connect((ip, port))
 
 

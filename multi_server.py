@@ -8,6 +8,10 @@ import threading
 
 import time as sleep
 
+lock = threading.Lock()
+
+
+
 
 stop_server = False
 
@@ -19,6 +23,7 @@ def console_input():
         text_input = input("Type stop to exit!\n")
         if text_input == "stop" or text_input == "Stop":
             stop_server = True
+            break
 
 
 def on_new_client(clientsocket, addr):
@@ -30,45 +35,52 @@ def on_new_client(clientsocket, addr):
         received_data = from_client.split("-|-")
         beacon_id = received_data[0]
         time = received_data[1]
+        #print("beacon:" + beacon_id + " time: " + time)
         datastore = json.loads(received_data[2])
 
 
 
+        lock.acquire()
+        for blueAddr in datastore:
+            #The key is the bluetooth address
+            if blueAddr in pos_dict:
+                pos_dict[blueAddr][beacon_id] = datastore[blueAddr]
+                
+            else:
+                pos_dict[blueAddr] = {'1':0,'2':0,'3':0}
+                pos_dict[blueAddr][beacon_id] = datastore[blueAddr]
+                
 
-        for addr in pos_dict:
-            print(addr)
-            print(beacon_id)
-            print(str((((-datastore[addr]) + 27) / -24.5) * 20))
-            pos_dict[addr][int(beacon_id)-1] = (((-datastore[addr]) + 27) / -24.5) * 20
-
-
-
-
+        
+        lock.release()
 
         if stop_server:
             clientsocket.close()
-            sys.exit(0)
+            break
 
 
 def triangulate():
     while True:
+        lock.acquire()
+        #for every bluetooth address get rssi from each beacon
         for addr in pos_dict:
-            x1 = 0
-            y1 = 0
-            r1 = pos_dict[addr][0]
-            x2 = 200
-            y2 = 0
-            r2 = pos_dict[addr][1]
-            x3 = 0
-            y3 = 20
-            r3 = pos_dict[addr][1] #TODO: CHANGE ME
-
+            x1 = 0 #x location of first beacon
+            y1 = 0 #y location of first beacon
+            r1 = ((pos_dict[addr]['1']+27)/-24.5)*100 #rssi value of beacon converted
+            x2 = 200 #x location of second beacon
+            y2 = 0 #y location of second beacon
+            r2 = ((pos_dict[addr]['2']+27)/-24.5 )*100
+            x3 = 0 #x location of third beacon
+            y3 = 20 #y location of third beacon
+            r3 = ((pos_dict[addr]['3']+27)/-24.5)*100 #TODO: CHANGE ME
             x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
+            
             if addr == "C4:86:E9:19:F7:51" or addr == "F8:AD:CB:0F:D8:E6":
                 print("Device Location of {}:".format(addr))
                 print(x, y)
                 draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y)
-            sleep.sleep(2)
+        lock.release()
+        sleep.sleep(2)
 
 
 # A function to apply trilateration formulas to return the (x,y) intersection point of three circles
@@ -84,17 +96,20 @@ def trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3):
     return x, y
 
 
+
+
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-port = 8080
-host = 'localhost'
+port = 5000
+host = '192.168.43.48'
 sock.bind((host, port))
 sock.listen(5)
 print('Started Server')
 y = threading.Thread(target=console_input)
+print("starting console input thread")
 y.start()
 z = threading.Thread(target=triangulate)
+print("starting triangulate thread")
 z.start()
-
 
 while True:
     conn, addr = sock.accept()
