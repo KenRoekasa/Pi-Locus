@@ -32,6 +32,7 @@ def on_new_client(clientsocket, addr):
         data = clientsocket.recv(1024)
         if not data: break
         from_client = data.decode()
+        print(from_client)
         received_data = from_client.split("-|-")
         beacon_id = received_data[0]
         time = received_data[1]
@@ -54,6 +55,9 @@ def on_new_client(clientsocket, addr):
         
         lock.release()
 
+        #print(pos_dict)
+        
+            
         if stop_server:
             clientsocket.close()
             break
@@ -66,23 +70,27 @@ def triangulate():
         for addr in pos_dict:
             x1 = 0 #x location of first beacon
             y1 = 0 #y location of first beacon
-            r1 = ((pos_dict[addr]['1']+27)/-24.5)*100 #rssi value of beacon converted
-            x2 = 200 #x location of second beacon
-            y2 = 0 #y location of second beacon
-            r2 = ((pos_dict[addr]['2']+27)/-24.5 )*100
-            x3 = 0 #x location of third beacon
+            r1 = ((pos_dict[addr]['1']+27)/-24.5)*10 #rssi value of beacon converted
+            x2 = 3 #x location of second beacon
+            y2 = 40 #y location of second beacon
+            r2 = ((pos_dict[addr]['2']+27)/-24.5 )*10
+            x3 = 25 #x location of third beacon
             y3 = 2 #y location of third beacon
-            r3 = ((pos_dict[addr]['3']+27)/-24.5)*100 
+            r3 = ((pos_dict[addr]['3']+27)/-24.5)*10 
             x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
+
+            print(r1)
+            print(r2)
+            print(r3)
             
             if addr == "C4:86:E9:19:F7:51":
-                print("Device Location of {}:".format(addr))
-                print(x, y)
+               # print("Device Location of {}:".format(addr))
+               # print(x, y)
                 draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y,"blue")
 
             if addr == "F8:AD:CB:0F:D8:E6":
-                print("Device Location of {}:".format(addr))
-                print(x, y)
+               # print("Device Location of {}:".format(addr))
+                #print(x, y)
                 draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y,"red")
         lock.release()
         sleep.sleep(2)
