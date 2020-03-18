@@ -33,11 +33,15 @@ def on_new_client(clientsocket, addr):
         if not data: break
         from_client = data.decode()
         print(from_client)
-        received_data = from_client.split("-|-")
-        beacon_id = received_data[0]
-        time = received_data[1]
-        #print("beacon:" + beacon_id + " time: " + time)
-        datastore = json.loads(received_data[2])
+
+        received_messages = from_client.split("|--")
+        for i in range(1, len(received_messages)):
+            received_data = received_messages[i].split("-|-")
+            beacon_id = received_data[0]
+            time = received_data[1]
+            datastore = json.loads(received_data[2])
+            #print("beacon:" + beacon_id + " time: " + time)
+
 
 
 
