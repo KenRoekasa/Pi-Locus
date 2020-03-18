@@ -68,19 +68,22 @@ def on_new_client(clientsocket, addr):
 
 
 def triangulate():
+    scale = 50
     while True:
         lock.acquire()
         #for every bluetooth address get rssi from each beacon
         for addr in pos_dict:
             x1 = 0 #x location of first beacon
             y1 = 0 #y location of first beacon
-            r1 = ((pos_dict[addr]['1']+27)/-24.5)*10 #rssi value of beacon converted
-            x2 = 3 #x location of second beacon
-            y2 = 40 #y location of second beacon
-            r2 = ((pos_dict[addr]['2']+27)/-24.5 )*10
-            x3 = 25 #x location of third beacon
-            y3 = 2 #y location of third beacon
-            r3 = ((pos_dict[addr]['3']+27)/-24.5)*10 
+            #print("rssi: " + str(pos_dict[addr]['1']))
+           # print(str((-40-(pos_dict[addr]['1']))/(10*4)))
+            r1 = 10 ** ((-40-(pos_dict[addr]['1']))/(10*4)) #rssi value of beacon converted
+            x2 = 0 #x location of second beacon
+            y2 = 12.5 #y location of second beacon
+            r2 = 10 ** ((-40-(pos_dict[addr]['2']))/(10*4))
+            x3 = 11.5*scale #x location of third beacon
+            y3 = 0 #y location of third beacon
+            r3 = 10 ** ((-40-(pos_dict[addr]['3']))/(10*4))
             x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
 
             if r1 < 0:
@@ -94,8 +97,8 @@ def triangulate():
        
             
             if addr == "C4:86:E9:19:F7:51":
-               # print("Device Location of {}:".format(addr))
-               # print(x, y)
+                print("Device Location of {}:".format(addr))
+                print(x, y)
                 print("r1 :" + str(r1))
                 print("r2 :" + str(r2))
                 print("r3 :" + str(r3))
