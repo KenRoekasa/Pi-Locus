@@ -83,13 +83,22 @@ def triangulate():
             r3 = ((pos_dict[addr]['3']+27)/-24.5)*10 
             x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
 
-            print(r1)
-            print(r2)
-            print(r3)
+            if r1 < 0:
+                r1 =0
+            if r2 < 0:
+                r2 =0
+            if r3 < 0:
+                r3 =0
+                
+
+       
             
             if addr == "C4:86:E9:19:F7:51":
                # print("Device Location of {}:".format(addr))
                # print(x, y)
+                print("r1 :" + str(r1))
+                print("r2 :" + str(r2))
+                print("r3 :" + str(r3))
                 draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y,"blue")
 
             if addr == "F8:AD:CB:0F:D8:E6":

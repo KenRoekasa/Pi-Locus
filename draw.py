@@ -61,7 +61,7 @@ def drawCellTowers(x1,y1,x2,y2,x3,y3,x,y,color):
   myPen.circle(r3)
   
   myPen.setpos(x,y)
-  myPen.dot(2, color)
+  myPen.dot(5, color)
     
 
   
