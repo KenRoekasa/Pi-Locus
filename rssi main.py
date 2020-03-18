@@ -5,6 +5,7 @@ import sys
 import bluetooth
 import bluetooth._bluetooth as bluez  # low level bluetooth wrappers
 import datetime
+import sys
 
 import json
 
@@ -13,32 +14,14 @@ import socket
 
 
 def connect(sock):
-    ip = '192.168.43.48'
-    port = 5000
+    ip = sys.argv[2]
+    port = int(sys.argv[3])
     sock.connect((ip, port))
 
 
 def sendJson(jsonString):
     WIFI_sock.send(jsonString)
 
-
-
-def setup_server(serv):
-    ip = 'localhost'
-    port = 8080
-    serv.bind((ip, port))
-    serv.listen(5)
-    while True:
-        conn, addr = serv.accept()
-        from_client = ''
-        while True:
-            data = conn.recv(4096)
-            if not data: break
-            from_client += data
-            print (from_client)
-            conn.send("I am SERVER<br>")
-        conn.close()
-        print ('client disconnected')
 
 
 def read_inquiry_mode(sock):
@@ -142,15 +125,6 @@ def convert_from_JSON(jsonString):
 
 
 
-
-
-
-
-
-
-
-
-
 dev_id = 0
 try:
     # Create raw HCI sock to set our BT name
@@ -173,7 +147,7 @@ WIFI_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 connect(WIFI_sock)
 
-BEACON_ID = "1"
+BEACON_ID = sys.argv[1]
 for i in range(0,50):
     rssiResults = device_inquiry_with_with_rssi(sock)
     data = BEACON_ID + "-|-"

@@ -71,7 +71,7 @@ def triangulate():
             y2 = 0 #y location of second beacon
             r2 = ((pos_dict[addr]['2']+27)/-24.5 )*100
             x3 = 0 #x location of third beacon
-            y3 = 20 #y location of third beacon
+            y3 = 2 #y location of third beacon
             r3 = ((pos_dict[addr]['3']+27)/-24.5)*100 #TODO: CHANGE ME
             x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
             
@@ -99,8 +99,8 @@ def trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3):
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-port = 5000
-host = '192.168.43.48'
+port = int(sys.argv[2])
+host = sys.argv[1]
 sock.bind((host, port))
 sock.listen(5)
 print('Started Server')
