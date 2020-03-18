@@ -150,7 +150,7 @@ connect(WIFI_sock)
 BEACON_ID = sys.argv[1]
 for i in range(0,50):
     rssiResults = device_inquiry_with_with_rssi(sock)
-    data = BEACON_ID + "-|-"
+    data = "|--" + BEACON_ID + "-|-"
     data += str(datetime.datetime.now().time()) + "-|-"
     data += convert_to_JSON(rssiResults)
     if rssiResults != {}:
