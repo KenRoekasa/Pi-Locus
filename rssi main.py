@@ -148,12 +148,13 @@ WIFI_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connect(WIFI_sock)
 
 BEACON_ID = sys.argv[1]
-rssiResults = device_inquiry_with_with_rssi(sock)
-data = "|--" + BEACON_ID + "-|-"
-data += str(datetime.datetime.now().time()) + "-|-"
-data += convert_to_JSON(rssiResults)
-if rssiResults != {}:
-    WIFI_sock.send(data.encode())
+while True:
+    rssiResults = device_inquiry_with_with_rssi(sock)
+    data = "|--" + BEACON_ID + "-|-"
+    data += str(datetime.datetime.now().time()) + "-|-"
+    data += convert_to_JSON(rssiResults)
+    if rssiResults != {}:
+        WIFI_sock.send(data.encode())
 WIFI_sock.close()
 
 
