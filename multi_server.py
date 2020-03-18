@@ -72,13 +72,18 @@ def triangulate():
             r2 = ((pos_dict[addr]['2']+27)/-24.5 )*100
             x3 = 0 #x location of third beacon
             y3 = 2 #y location of third beacon
-            r3 = ((pos_dict[addr]['3']+27)/-24.5)*100 #TODO: CHANGE ME
+            r3 = ((pos_dict[addr]['3']+27)/-24.5)*100 
             x, y = trackDevice(x1, y1, r1, x2, y2, r2, x3, y3, r3)  # change when three devices are connected
             
-            if addr == "C4:86:E9:19:F7:51" or addr == "F8:AD:CB:0F:D8:E6":
+            if addr == "C4:86:E9:19:F7:51":
                 print("Device Location of {}:".format(addr))
                 print(x, y)
-                draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y)
+                draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y,"blue")
+
+            if addr == "F8:AD:CB:0F:D8:E6":
+                print("Device Location of {}:".format(addr))
+                print(x, y)
+                draw.drawCellTowers(x1, y1, x2, y2, x3, y3, x, y,"red")
         lock.release()
         sleep.sleep(2)
 

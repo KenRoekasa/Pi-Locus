@@ -1,4 +1,4 @@
-mport socket
+import socket
 
 import draw
 
@@ -19,11 +19,12 @@ def trackDevice(x1,y1,r1,x2,y2,r2,x3,y3,r3):
 
 serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ip = 'localhost'
-port = 8080
+port = 5000
 serv.bind((ip, port))
 serv.listen(5)
 while True:
     conn, addr = serv.accept()
+    print('Client Connected')
     from_client = ''
     while True:
         data = conn.recv(4096)
